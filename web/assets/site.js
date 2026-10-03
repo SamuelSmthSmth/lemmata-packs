@@ -22,6 +22,8 @@ for (const button of document.querySelectorAll(".theme-toggle")) {
 // "Browse" is current on the catalogue itself.
 const browse = document.querySelector("[data-browse]");
 if (browse && !document.querySelector(".pack-head") && !document.querySelector(".guide")) browse.setAttribute("aria-current", "page");
+// …and "Publish a pack" on the guide.
+if (document.querySelector(".guide")) document.querySelector('.top-links a[href$="publish/"]')?.setAttribute("aria-current", "page");
 
 // Narrow screens: the rail folds to the search and a button.
 const rail = document.querySelector(".rail");
