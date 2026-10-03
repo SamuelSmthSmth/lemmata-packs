@@ -1,0 +1,31 @@
+name: Check packs
+
+# Every pull request: each pack must be valid and every entry must still give
+# the verdict it records, checked by the engine the app runs today.
+
+on:
+  pull_request:
+  workflow_call:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch the engine the app publishes
+        run: |
+          mkdir -p .engine
+          base=https://lemmata.sous.systems/static/engine
+          curl -fsSL "$base/engine.zip" -o engine.zip
+          curl -fsSL "$base/requirements.txt" -o .engine/requirements.txt
+          curl -fsSL "$base/version.json" -o .engine/version.json
+          unzip -q engine.zip -d .engine
+          pip install --quiet -r .engine/requirements.txt
+      - run: python tools/build_index.py --engine .engine --out site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: site

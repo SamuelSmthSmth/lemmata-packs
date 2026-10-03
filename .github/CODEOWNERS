@@ -1,0 +1,5 @@
+# Packs in the core/ scope ship with the app; their source of truth is the app
+# repository (courses/), published here with ui/publish_packs.py.
+/packs/core/ @SamuelSmthSmth
+/tools/ @SamuelSmthSmth
+/.github/ @SamuelSmthSmth

@@ -1,0 +1,34 @@
+{
+  "format": 1,
+  "name": "yourname/group-basics",
+  "version": "1.0.0",
+  "title": "Group basics",
+  "courses": [],
+  "summary": "First facts about groups, checked line by line.",
+  "authors": ["Your Name"],
+  "license": "CC-BY-SA-4.0",
+  "engine": ">=0.1",
+  "depends": {},
+  "chapters": [{ "id": "1", "title": "Groups" }],
+  "entries": [
+    {
+      "id": "inverse-of-an-inverse",
+      "chapter": "1",
+      "ref": "Lemma 1",
+      "title": "The inverse of an inverse",
+      "kind": "proof",
+      "expected": "VALID",
+      "source": "Theorem: \"Inverse of an inverse\"\nProof:\n    Assume Group(G, op, e, inv)\n    Given a : G\n    Step: op(inv(a), a) = e\n    Therefore inv(inv(a)) = a\nQED\n"
+    },
+    {
+      "id": "groups-commute",
+      "chapter": "1",
+      "ref": "Trap 1",
+      "title": "Every group is abelian",
+      "kind": "trap",
+      "expected": "INVALID",
+      "explanation": "Nothing in the group axioms makes op commutative; that is what an abelian group adds.",
+      "source": "Assume Group(G, op, e, inv)\nLet a, b : G\nStep: op(a, b) = op(b, a)\n"
+    }
+  ]
+}
