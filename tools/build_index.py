@@ -167,10 +167,13 @@ def main() -> int:
                 "sha256": hashlib.sha256(raw).hexdigest(),
             }
         )
+    # Where to contribute: the app links its "Share to the registry" steps here.
+    repository = os.environ.get("GITHUB_REPOSITORY", "SamuelSmthSmth/lemmata-packs")
     document = {
         "format": INDEX_FORMAT,
         "generated": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "engine": engine_version,
+        "contribute": f"https://github.com/{repository}",
         "packs": index,
     }
     (out / "index.json").write_text(json.dumps(document, ensure_ascii=False, indent=1) + "\n")
