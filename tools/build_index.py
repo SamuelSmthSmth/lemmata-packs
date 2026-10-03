@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import html
 import json
 import multiprocessing as mp
 import os
@@ -177,19 +176,12 @@ def main() -> int:
         "packs": index,
     }
     (out / "index.json").write_text(json.dumps(document, ensure_ascii=False, indent=1) + "\n")
-    rows = "\n".join(
-        f"<li><a href=\"{html.escape(p['url'])}\"><code>{html.escape(p['name'])}</code></a> "
-        f"v{html.escape(p['version'])} — {html.escape(p['title'])} ({p['entries']} entries)</li>"
-        for p in index
-    )
-    (out / "index.html").write_text(
-        "<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>"
-        "<title>Lemmata packs</title><body style='font:14px/1.5 system-ui;max-width:42rem;margin:2rem auto;padding:0 16px'>"
-        "<h1>Lemmata packs</h1><p>The public pack registry for "
-        "<a href='https://lemmata.sous.systems/'>Lemmata</a>. Every entry below was checked by engine "
-        f"{html.escape(engine_version)} on {document['generated']}. The app reads <a href='index.json'>index.json</a>.</p>"
-        f"<ul>{rows}</ul></body>\n"
-    )
+    # The site people read: the catalogue, a page per pack, the guide (tools/pages.py).
+    sys.path.insert(0, str(ROOT / "tools"))
+    import pages as registry_pages
+
+    pages = registry_pages.build(out, [pack for _, pack, _ in packs], document)
+    print(f"wrote {len(pages)} pages")
     print(f"wrote {out}/index.json: {len(index)} packs, every entry verified")
     return 0
 

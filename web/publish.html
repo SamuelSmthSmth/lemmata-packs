@@ -1,0 +1,37 @@
+<header class="page-head">
+          <h1>Publish a pack</h1>
+          <p class="lede">A pack is a module's results, or a topic's, written as proofs the checker can read. You make it in the app, and a pull request puts it here. Nothing is listed until every entry checks.</p>
+        </header>
+        <article class="guide">
+          <h2 id="make">1. Make it in the app</h2>
+          <ol>
+            <li>Open <a href="{{ app }}">Lemmata</a> and put your proofs in one folder (the <strong>Files</strong> tab).</li>
+            <li>Click the folder's pack button, or <strong>Library → New pack…</strong>, and fill in the details:
+              <ul>
+                <li><strong>Name:</strong> <code>scope/slug</code>, lower case, such as <code>yourname/real-analysis</code>. The scope is yours: your name, a society, a department. <code>core/</code> is kept for the packs that ship with the app.</li>
+                <li><strong>Version:</strong> <code>1.0.0</code> to start. Raise it whenever you change the pack, so installed copies are offered the update.</li>
+                <li><strong>Course codes</strong> are optional: a pack can be a topic.</li>
+                <li>For each proof, a <strong>reference</strong> in the notes' own numbering (<code>Example 2.18</code>), a title and a chapter. Mark a deliberate mistake as a <strong>trap</strong> and say what is wrong.</li>
+              </ul>
+            </li>
+            <li><strong>Export .pack.json.</strong> The app checks every proof as it exports and records the verdict each gives, so the file is true when it leaves your hands.</li>
+          </ol>
+
+          <h2 id="submit">2. Open a pull request</h2>
+          <ol>
+            <li>Add the file to the <a href="{{ contribute }}">registry repository</a> at <code>packs/&lt;scope&gt;/&lt;slug&gt;.pack.json</code>, matching its name. GitHub's <strong>Add file → Upload files</strong> works; nothing needs installing.</li>
+            <li>Open the pull request. The registry's checks run at once: the pack must be valid, and every entry must give its recorded verdict under the engine the app runs today. Fix whatever they report and push again.</li>
+            <li>Once it is merged, the pack is listed here within minutes, and anyone can find it from the app's Library.</li>
+          </ol>
+
+          <h2 id="rules">What gets merged</h2>
+          <dl class="rules">
+            <div><dt>Your own wording</dt><dd>Restate results in your words and write your own proofs. Never paste lecture notes or textbook passages.</dd></div>
+            <div><dt>Entries that check</dt><dd>A proof must check; a trap must fail, with an explanation of the mistake.</dd></div>
+            <div><dt>The source's numbering</dt><dd>References follow the notes' own numbers, so students can find their way back.</dd></div>
+            <div><dt>An open licence</dt><dd>Packs are CC BY-SA 4.0 unless the pack names another licence.</dd></div>
+          </dl>
+
+          <h2 id="format">Writing one by hand</h2>
+          <p>A pack is a JSON file: a name, a version, chapters and entries, each entry with its source and the verdict it must give. The registry's <a href="{{ contribute }}/blob/main/templates/example.pack.json">example pack</a> shows the format, and every file is checked against it.</p>
+        </article>

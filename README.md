@@ -29,3 +29,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md). In short:
 ## Licence
 
 Packs are licensed under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) unless a pack's `license` field says otherwise. The tooling in `tools/` is Apache-2.0. Packs must be your own transcriptions: restate results and write your own proofs, and do not paste lecture notes.
+
+## The site
+
+`tools/build_index.py` also writes the site people read (via `tools/pages.py` and `web/`): a catalogue with search, a page per pack listing every entry by chapter with its source, and a publishing guide. Each pack page's **Open in Lemmata** opens the app's Library on that pack (`/app/?install=<name>`).

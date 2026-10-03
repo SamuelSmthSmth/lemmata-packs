@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title }}</title>
+    <meta name="description" content="{{ description }}" />
+    <link rel="icon" href="{{ root }}assets/icon.svg" type="image/svg+xml" />
+    <script>
+      // The same theme key as the app and its site, read before first paint.
+      (function () {
+        var theme = null;
+        try { theme = localStorage.getItem("aether-theme"); } catch (err) {}
+        if (theme !== "light" && theme !== "dark") theme = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <link rel="stylesheet" href="{{ root }}assets/site.css" />
+    <script type="module" src="{{ root }}assets/site.js"></script>
+  </head>
+  <body data-root="{{ root }}">
+    <a class="skip-link" href="#main">Skip to the content</a>
+    <header class="top">
+      <a class="brand" href="{{ root }}"><img src="{{ root }}assets/icon.svg" alt="" width="22" height="22" /><span>Lemmata <span class="brand-sub">packs</span></span></a>
+      <nav class="top-links" aria-label="Site">
+        <a href="{{ root }}" data-browse>Browse</a>
+        <a href="{{ root }}publish/">Publish a pack</a>
+        <a href="{{ contribute }}">GitHub</a>
+        <a href="{{ site }}">About Lemmata</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch between light and dark theme">
+        <svg class="icon icon--sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="icon icon--moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+      </button>
+      <a class="button button--primary top-open" href="{{ app }}">Open Lemmata</a>
+    </header>
+    <div class="layout">
+      <aside class="rail" aria-label="Packs">
+        <form class="search" role="search" onsubmit="return false">
+          <label class="visually-hidden" for="search">Search packs and theorems</label>
+          <input id="search" type="search" placeholder="MTH2008, Cauchy, group…" autocomplete="off" spellcheck="false" />
+        </form>
+        <button class="rail-toggle" type="button" aria-expanded="false" aria-controls="rail-packs">Browse packs</button>
+        <ul class="rail-groups" id="rail-packs">
+          {{ rail }}
+        </ul>
+        <p class="rail-empty" hidden>No pack matches.</p>
+        <a class="rail-publish" href="{{ root }}publish/">Publish a pack</a>
+      </aside>
+      <main id="main">
+        {{ main }}
+        <footer class="foot">
+          <p>Packs are CC BY-SA 4.0 unless they say otherwise. The registry is a Git repository: every change is a pull request, and its checks run every entry with engine {{ engine }}. <a href="{{ root }}index.json">index.json</a> · <a href="{{ contribute }}">Source</a> · <a href="{{ site }}privacy/">Privacy</a></p>
+        </footer>
+      </main>
+    </div>
+  </body>
+</html>
