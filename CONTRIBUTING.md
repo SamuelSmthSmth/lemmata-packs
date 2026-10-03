@@ -2,7 +2,7 @@
 
 ## 1. Make it in the app
 
-1. Open [Lemmata](https://lemmata.sous.systems) and put your proofs in one folder (**Files** tab).
+1. Open [Lemmata](https://lemmata.sous.systems/app/) and put your proofs in one folder (**Files** tab).
 2. Click the folder's pack button (or Library → **New pack…**) and fill in the pack's details:
    - **Name:** `scope/slug`, lower case, e.g. `yourname/real-analysis`. The scope is yours: your name, a society, a department. `core/` is reserved for the packs that ship with the app.
    - **Version:** semver, starting at `1.0.0`. Raise it whenever you change the pack, so installed copies are offered the update.

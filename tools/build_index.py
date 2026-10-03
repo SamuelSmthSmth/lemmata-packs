@@ -4,7 +4,7 @@
     python tools/build_index.py --engine .engine [--out site] [--budget 30] [--jobs N]
 
 ``--engine`` is a directory holding the engine as the app publishes it
-(``https://lemmata.sous.systems/static/engine/engine.zip``, unzipped, with
+(``https://lemmata.sous.systems/app/static/engine/engine.zip``, unzipped, with
 ``version.json`` beside it), so packs are checked by exactly the engine
 students use.  For each ``packs/<scope>/<slug>.pack.json``:
 
@@ -186,7 +186,7 @@ def main() -> int:
         "<!doctype html><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'>"
         "<title>Lemmata packs</title><body style='font:14px/1.5 system-ui;max-width:42rem;margin:2rem auto;padding:0 16px'>"
         "<h1>Lemmata packs</h1><p>The public pack registry for "
-        "<a href='https://lemmata.sous.systems'>Lemmata</a>. Every entry below was checked by engine "
+        "<a href='https://lemmata.sous.systems/'>Lemmata</a>. Every entry below was checked by engine "
         f"{html.escape(engine_version)} on {document['generated']}. The app reads <a href='index.json'>index.json</a>.</p>"
         f"<ul>{rows}</ul></body>\n"
     )

@@ -18,7 +18,7 @@ jobs:
       - name: Fetch the engine the app publishes
         run: |
           mkdir -p .engine
-          base=https://lemmata.sous.systems/static/engine
+          base=https://lemmata.sous.systems/app/static/engine
           curl -fsSL "$base/engine.zip" -o engine.zip
           curl -fsSL "$base/requirements.txt" -o .engine/requirements.txt
           curl -fsSL "$base/version.json" -o .engine/version.json
