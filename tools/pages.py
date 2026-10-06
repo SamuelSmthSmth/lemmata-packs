@@ -152,6 +152,9 @@ def source_html(source: str) -> str:
 def entry_html(pack: dict, entry: dict) -> str:
     trap = entry["kind"] == "trap"
     verdict = "trap · fails, as it should" if trap else ("checks" if entry["expected"] == "VALID" else entry["expected"].lower())
+    level = entry.get("level") or pack.get("level") or "off"
+    if level != "off":
+        verdict += f" · at {level.capitalize()}"
     explanation = f'<p class="entry-why">{escape(entry["explanation"])}</p>' if entry.get("explanation") else ""
     chevron = '<svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
     return (

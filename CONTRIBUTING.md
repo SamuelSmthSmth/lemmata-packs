@@ -22,6 +22,7 @@
 
 - Your own wording: restate results in your words and write your own proofs. Never paste lecture notes or textbook passages.
 - Entries that check. A *trap* must fail, with an explanation of the mistake.
+- A checking level, if your verdicts depend on one. `"level": "course"` on the pack (or on one entry) means its verdicts hold with the app's *Course* level, and CI checks them there; without it, a pack is checked with the level *Off*. The app records the level of each proof when it makes a pack.
 - References that follow the source's own numbering, so students can find their way back to their notes.
 
 Everything here is licensed CC BY-SA 4.0 unless the pack says otherwise.
