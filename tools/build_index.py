@@ -11,7 +11,9 @@ students use.  For each ``packs/<scope>/<slug>.pack.json``:
 1. the file must be a valid pack (``aether.packs.validate_pack``), and its
    ``name`` must match its path;
 2. every entry is checked again, each in its own process under a wall-clock
-   budget, and must give the verdict it records as ``expected``.
+   budget, at its checking level (``aether.packs.entry_level``: the entry's
+   ``level``, else the pack's, else off), and must give the verdict it
+   records as ``expected``.
 
 Any failure fails the build, so nothing reaches the index unverified.  The
 site written to ``--out`` holds ``index.json``, a copy of every pack file at
@@ -35,13 +37,14 @@ PACKS = ROOT / "packs"
 INDEX_FORMAT = 1
 
 
-def verdict(engine: str, source: str, conn) -> None:
-    """Child process: the verdict the app would show for *source* (lenient domains)."""
+def verdict(engine: str, source: str, level: str, conn) -> None:
+    """Child process: the verdict the app would show for *source* (lenient domains) at *level*."""
     sys.path.insert(0, engine)
     from aether import ParseError, ProofChecker
 
     try:
-        reports = ProofChecker().check_source(source)
+        checker = ProofChecker() if level == "off" else ProofChecker(kernel=level)
+        reports = checker.check_source(source)
     except ParseError:
         conn.send("PARSE ERROR")
         return
@@ -56,17 +59,17 @@ def verdict(engine: str, source: str, conn) -> None:
         conn.send("VALID")
 
 
-def check_entries(engine: str, jobs: list[tuple[str, str, str]], budget: float, workers: int) -> dict[str, str]:
-    """Run (key, source, expected) jobs, *workers* at a time; return key -> verdict."""
+def check_entries(engine: str, jobs: list[tuple[str, str, str, str]], budget: float, workers: int) -> dict[str, str]:
+    """Run (key, source, expected, level) jobs, *workers* at a time; return key -> verdict."""
     ctx = mp.get_context("spawn")
     results: dict[str, str] = {}
     pending = list(jobs)
     running: list[tuple[str, mp.Process, object, float]] = []
     while pending or running:
         while pending and len(running) < workers:
-            key, source, _ = pending.pop(0)
+            key, source, _, level = pending.pop(0)
             parent, child = ctx.Pipe(duplex=False)
-            proc = ctx.Process(target=verdict, args=(engine, source, child), daemon=True)
+            proc = ctx.Process(target=verdict, args=(engine, source, level, child), daemon=True)
             proc.start()
             child.close()
             running.append((key, proc, parent, time.monotonic()))
@@ -100,6 +103,12 @@ def main() -> int:
     sys.path.insert(0, engine)
     from aether.packs import validate_pack
 
+    try:
+        from aether.packs import entry_level
+    except ImportError:  # an engine from before levels: every entry is checked off
+        def entry_level(pack: dict, entry: dict) -> str:
+            return "off"
+
     version_file = Path(engine) / "version.json"
     engine_version = json.loads(version_file.read_text())["engine"] if version_file.exists() else "unknown"
 
@@ -123,16 +132,17 @@ def main() -> int:
         packs.append((path, pack, raw))
 
     jobs = [
-        (f"{pack['name']}/{entry['id']}", entry["source"], entry["expected"])
+        (f"{pack['name']}/{entry['id']}", entry["source"], entry["expected"], entry_level(pack, entry))
         for _, pack, _ in packs
         for entry in pack["entries"]
     ]
     print(f"checking {len(jobs)} entries in {len(packs)} packs with engine {engine_version} ({args.jobs} at a time)")
     started = time.monotonic()
     got = check_entries(engine, jobs, args.budget, args.jobs)
-    for key, _, expected in jobs:
+    for key, _, expected, level in jobs:
         if got.get(key) != expected:
-            problems.append(f"{key}: records {expected}, the engine gives {got.get(key)}")
+            at = "" if level == "off" else f" at {level}"
+            problems.append(f"{key}: records {expected}{at}, the engine gives {got.get(key)}")
     print(f"checked in {time.monotonic() - started:.0f} s")
 
     if problems:
